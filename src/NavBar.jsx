@@ -1,4 +1,9 @@
+import { useSelector } from "react-redux";
+
 const NavBar = () => {
+
+    const user = useSelector(store => store.user);
+    console.log(user);
 
     return (
         <>
@@ -10,7 +15,7 @@ const NavBar = () => {
           <div className="form-control">
            
           </div>
-          <div className="dropdown dropdown-end mx-5">
+          {user && (<div className="dropdown dropdown-end mx-5">
             <div
               tabIndex={0}
               role="button"
@@ -40,7 +45,7 @@ const NavBar = () => {
                 <a>Logout</a>
               </li>
             </ul>
-          </div>
+          </div>)}
         </div>
       </div>
         </>
