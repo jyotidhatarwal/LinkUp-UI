@@ -32,7 +32,6 @@ const Body = () => {
 
     return (
         <>
-        <h1> Body Component</h1>
         <NavBar />
         <Outlet />
         <Footer />
