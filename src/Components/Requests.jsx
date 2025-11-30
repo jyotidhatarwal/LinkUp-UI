@@ -47,8 +47,10 @@ const Requests = () => {
         {requests.map((request) => {
 
             const {_id, firstName, lastName, photoUrl, age, gender, about} = request.fromUserId;
+            console.log("This is request object->", request);
             return (
             <div key={_id} className="flex justify-between items-center m-4 p-4 border rounded-lg w-2/3 mx-auto">
+                {console.log("This is PhotoURl,", photoUrl)}
                 <div>
                 {photoUrl && <img alt="photo" className="w-20 h-20 rounded-full" src={photoUrl} />}
                 </div>

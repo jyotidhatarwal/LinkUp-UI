@@ -39,6 +39,7 @@ const Connections = () => {
             {connections.map((connection) => {
 
                 const {_id, firstName, lastName, photoUrl, age, gender, about} = connection;
+                console.log("Connection object", connection);
                 return (
                 <div key={_id} className="flex m-4 p-4 border rounded-lg w-1/2 mx-auto">
                     <div>
