@@ -25,7 +25,7 @@ const NavBar = () => {
 
     return (
         <>
-         <div className="navbar bg-base-200">
+         <div className="navbar bg-neutral-600">
         <div className="flex-1">
           <Link  to="/feed" className="btn btn-ghost text-xl">👩🏻‍💻LinkUp</Link>
         </div>
