@@ -57,6 +57,9 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/feed">Feed</Link>
+              </li>
+              <li>
                 <Link to="/connections">Connections</Link>
               </li>
               <li>
