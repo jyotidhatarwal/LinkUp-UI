@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
 const Chat = () => {
     const {targetUserId} = useParams();
@@ -12,6 +14,26 @@ const Chat = () => {
     const loggedInUser = useSelector(store => store?.user);
     const userId = loggedInUser?._id;
     
+    const fetchChatMessages = async () => {
+        const chat = await axios.get(BASE_URL + "/chat/" + targetUserId, {withCredentials: true});
+
+        console.log(chat.data.messages);
+
+        const chatMessages = chat?.data?.messages?.map((message) => {
+            return (
+                {
+                    firstName: message?.senderId?.firstName,
+                    lastName: message?.senderId?.lastName,
+                    text: message?.text
+                }
+            )
+        });
+        setMessages(chatMessages);
+    }
+
+    useEffect(() => {
+        fetchChatMessages();
+    },[]);
 
     useEffect(() => {
 
@@ -22,9 +44,9 @@ const Chat = () => {
         socket.emit("joinChat",{firstName: loggedInUser.firstName,userId, targetUserId});
         console.log("Emit join chat after");
 
-        socket.on("messageReceived",({firstName, text}) => {
+        socket.on("messageReceived",({firstName,lastName, text}) => {
             console.log(firstName + " : " + text);
-            setMessages((messages) => [...messages, {firstName, text}]);
+            setMessages((messages) => [...messages, {firstName,lastName, text}]);
         })
 
         /* Whenever this component unloads we need to do the cleanup. 
@@ -44,6 +66,7 @@ const Chat = () => {
         const socket = createSocketConnection();
         socket.emit("sendMessage",{
             firstName: loggedInUser.firstName, 
+            lastName: loggedInUser.lastName,
             userId,
             targetUserId,
             text : newMessage
@@ -58,16 +81,16 @@ const Chat = () => {
             {/*Display Messages */}
             {messages.map((msg,index) => {
                 return (
-                    <div key={index} className="chat chat-start">
+                    <div key={index} className={"chat" +(loggedInUser.firstName === msg.firstName ? "chat-end" : "chat-start")}>
                     <div className="chat-image avatar">
-                      <div className="w-10 rounded-full">
+                      <div className="w-5 rounded-full">
                         <img
                           alt="Tailwind CSS chat bubble component"
-                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                          src={loggedInUser.photoUrl} />
                       </div>
                     </div>
                     <div className="chat-header">
-                      {msg.firstName} 
+                      {msg.firstName + " " + msg.lastName} 
                       <time className="text-xs opacity-50">12:45</time>
                     </div>
                     <div className="chat-bubble">{msg.text}</div>
