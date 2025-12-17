@@ -24,6 +24,7 @@ const Chat = () => {
                 {
                     firstName: message?.senderId?.firstName,
                     lastName: message?.senderId?.lastName,
+                    photoUrl: message?.senderId?.photoUrl,
                     text: message?.text
                 }
             )
@@ -44,9 +45,9 @@ const Chat = () => {
         socket.emit("joinChat",{firstName: loggedInUser.firstName,userId, targetUserId});
         console.log("Emit join chat after");
 
-        socket.on("messageReceived",({firstName,lastName, text}) => {
+        socket.on("messageReceived",({firstName,lastName,photoUrl, text}) => {
             console.log(firstName + " : " + text);
-            setMessages((messages) => [...messages, {firstName,lastName, text}]);
+            setMessages((messages) => [...messages, {firstName,lastName,photoUrl, text}]);
         })
 
         /* Whenever this component unloads we need to do the cleanup. 
@@ -86,7 +87,7 @@ const Chat = () => {
                       <div className="w-5 rounded-full">
                         <img
                           alt="Tailwind CSS chat bubble component"
-                          src={loggedInUser.photoUrl} />
+                          src={msg.photoUrl} />
                       </div>
                     </div>
                     <div className="chat-header">
